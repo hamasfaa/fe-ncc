@@ -37,5 +37,22 @@ export const useAuthStore = defineStore('auth', {
                 throw new Error(message);
             }
         },
+
+        async register({ username, email, password }) {
+            try {
+                const response = await axios.post(`${API_URL}/register`, {
+                    username,
+                    email,
+                    password
+                });
+
+                console.log(response);
+
+                return response.data;
+            } catch (error) {
+                const message = error.response?.data?.error || 'Registration failed';
+                throw new Error(message);
+            }
+        },
     }
 });
