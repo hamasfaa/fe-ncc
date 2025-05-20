@@ -1,9 +1,11 @@
 <script setup>
 import Sidebar from "@/components/Sidebar.vue";
+import Chat from "@/components/Chat.vue";
 </script>
 
 <template>
-  <main>
+  <div class="flex">
     <Sidebar />
-  </main>
+    <Chat />
+  </div>
 </template>
