@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import axios from 'axios';
 
-const API_URL = import.meta.env.VITE_API_URL;
+const API_URL = "http://localhost:8000";
 
 export const useAuthStore = defineStore('auth', {
     state: () => ({
@@ -54,5 +54,26 @@ export const useAuthStore = defineStore('auth', {
                 throw new Error(message);
             }
         },
+
+        logout() {
+            this.user = null;
+            this.token = null;
+
+            localStorage.removeItem('authToken');
+            localStorage.removeItem('user');
+        },
+
+        checkAuth() {
+            const token = localStorage.getItem('authToken');
+            const user = JSON.parse(localStorage.getItem('user') || 'null');
+
+            if (token && user) {
+                this.token = token;
+                this.user = user;
+                return true;
+            }
+
+            return false;
+        }
     }
 });
