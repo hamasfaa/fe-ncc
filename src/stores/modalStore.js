@@ -33,6 +33,7 @@ export const useModalStore = defineStore('modal', {
             try {
                 const response = await API_STORE.getConversationMessages(chatId);
                 const messages = response.messages;
+                this.listMessages = [];
 
                 messages.forEach(message => {
                     try {
