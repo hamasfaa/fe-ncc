@@ -117,6 +117,8 @@
                       <input
                         type="radio"
                         :name="'poll-' + message.poll_id"
+                        :value="opt.id"
+                        v-model="selectedOption[message.poll_id]"
                         class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300"
                       />
                       <span class="ml-2 text-sm text-gray-700">{{
@@ -156,7 +158,12 @@
                   {{ getTotalVotes(message.updated_results) }} votes
                 </span>
                 <button
-                  class="px-3 py-1 bg-blue-600 text-white text-sm font-medium rounded-md opacity-50"
+                  class="px-3 py-1 bg-blue-600 text-white text-sm font-medium rounded-md"
+                  :class="{
+                    'opacity-50': !selectedOption[message.poll_id],
+                    'hover:bg-blue-700': selectedOption[message.poll_id],
+                  }"
+                  @click.prevent="handlePollVote(message.poll_id)"
                 >
                   Submit
                 </button>
@@ -190,7 +197,7 @@
 </template>
 
 <script>
-import { ref, onMounted, watch } from "vue";
+import { ref, onMounted, watch, h } from "vue";
 import { useAuthStore } from "../stores/authStore";
 import { useModalStore } from "../stores/modalStore";
 import { useApiStore } from "../stores/apiStore";
@@ -235,6 +242,7 @@ export default {
   data() {
     return {
       message: "",
+      selectedOption: {},
     };
   },
 
@@ -256,6 +264,27 @@ export default {
         });
       } catch (error) {
         console.error("Error sending message:", error);
+      }
+    },
+
+    async handlePollVote(pollId) {
+      try {
+        const selectedOptionId = this.selectedOption[pollId];
+
+        if (!selectedOptionId) {
+          console.warn("No option selected for poll:", pollId);
+          return;
+        }
+
+        console.log(
+          "Submitting vote for poll:",
+          pollId,
+          "option:",
+          selectedOptionId
+        );
+        await this.API_STORE.submitPollVote(pollId, selectedOptionId);
+      } catch (error) {
+        console.error("Error voting in poll:", error);
       }
     },
 

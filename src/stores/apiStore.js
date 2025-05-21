@@ -196,6 +196,19 @@ export const useApiStore = defineStore('api', {
             } catch (error) {
                 console.error('Error fetching conversation messages:', error);
             }
+        },
+
+        async submitPollVote(pollId, optionId) {
+            try {
+                const response = await api.post(`polls/${pollId}/vote`, {
+                    option_id: optionId
+                })
+                if (response.status !== 200) {
+                    throw new Error('Failed to submit poll vote');
+                }
+            } catch (error) {
+                console.error('Error submitting poll vote:', error);
+            }
         }
     }
 })
