@@ -41,7 +41,118 @@
     </header>
 
     <div class="flex-1 overflow-y-auto p-4">
-      <!-- Messages will be added here -->
+      <div class="space-y-4">
+        <div
+          v-for="(message, index) in MODAL_STORE.listMessages"
+          :key="message.message_id || index"
+        >
+          <!-- TEXT MESSAGE -->
+          <div
+            v-if="message.type === 'text'"
+            :class="[
+              'message',
+              'flex',
+              'flex-col',
+              'max-w-3/4',
+              'rounded-lg',
+              'p-3',
+              'shadow-sm',
+              message.sender_id === AUTH_STORE.user.id
+                ? 'bg-blue-100 self-end'
+                : 'bg-white',
+            ]"
+          >
+            <div
+              :class="[
+                'message-header',
+                'flex',
+                'items-center',
+                'mb-1',
+                message.sender_id === AUTH_STORE.user.id ? 'justify-end' : '',
+              ]"
+            >
+              <template v-if="message.sender_id === AUTH_STORE.user.id">
+                <span class="text-xs text-gray-500">{{
+                  formatTime(message.timestamp)
+                }}</span>
+                <span class="ml-2 font-medium text-sm text-gray-800">You</span>
+              </template>
+              <template v-else>
+                <span class="font-medium text-sm text-gray-800">{{
+                  message.sender
+                }}</span>
+                <span class="ml-2 text-xs text-gray-500">{{
+                  formatTime(message.timestamp)
+                }}</span>
+              </template>
+            </div>
+            <div class="text-gray-700">
+              {{ message.content }}
+            </div>
+          </div>
+
+          <!-- POLL MESSAGE -->
+          <div
+            v-else-if="message.type === 'poll'"
+            class="bg-white rounded-lg border border-gray-200 shadow-sm"
+          >
+            <div class="p-4 border-b border-gray-100">
+              <h3 class="text-lg font-medium text-gray-800">
+                {{ message.question }}
+              </h3>
+              <span class="text-xs text-gray-500 mt-1 block">
+                {{ formatExpires(message.expires_at) }}
+              </span>
+            </div>
+
+            <div class="p-4 space-y-2">
+              <div v-for="opt in message.options" :key="opt.id">
+                <label class="flex flex-col cursor-pointer">
+                  <div class="flex items-center mb-1">
+                    <input
+                      type="radio"
+                      :name="'poll-' + message.poll_id"
+                      class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300"
+                    />
+                    <span class="ml-2 text-sm text-gray-700">{{
+                      opt.text
+                    }}</span>
+                  </div>
+
+                  <div class="w-full mt-1">
+                    <div class="h-1.5 relative bg-gray-200 rounded-full w-full">
+                      <div
+                        class="absolute top-0 left-0 h-full bg-blue-500 rounded-full"
+                        :style="{
+                          width:
+                            getPollPercentage(opt.id, message.updated_results) +
+                            '%',
+                        }"
+                      ></div>
+                    </div>
+                    <span class="text-xs text-gray-500 mt-0.5 block">
+                      {{ getPollPercentage(opt.id, message.updated_results) }}%
+                    </span>
+                  </div>
+                </label>
+              </div>
+            </div>
+
+            <div
+              class="px-4 py-3 bg-gray-50 rounded-b-lg flex items-center justify-between"
+            >
+              <span class="text-sm text-gray-500">
+                {{ getTotalVotes(message.updated_results) }} votes
+              </span>
+              <button
+                class="px-3 py-1 bg-blue-600 text-white text-sm font-medium rounded-md opacity-50"
+              >
+                Submit
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <form
@@ -68,12 +179,18 @@
 
 <script>
 import { useApiStore } from "@/stores/apiStore";
+import { useModalStore } from "@/stores/modalStore";
+import { useAuthStore } from "@/stores/authStore";
 
 export default {
   setup() {
     const API_STORE = useApiStore();
+    const MODAL_STORE = useModalStore();
+    const AUTH_STORE = useAuthStore();
     return {
       API_STORE,
+      MODAL_STORE,
+      AUTH_STORE,
     };
   },
   data() {
@@ -90,6 +207,30 @@ export default {
       } catch (error) {
         console.error("Error sending message:", error);
       }
+    },
+    formatTime(timestamp) {
+      const date = new Date(timestamp);
+      return date.toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+      });
+    },
+    formatExpires(expiresAt) {
+      if (!expiresAt) return "No expiration";
+      const date = new Date(expiresAt);
+      return (
+        "Expires at " +
+        date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
+      );
+    },
+    getPollPercentage(optionId, votes) {
+      if (!votes || votes.length === 0) return 0;
+      const total = votes.length;
+      const count = votes.filter((v) => v.option_id === optionId).length;
+      return ((count / total) * 100).toFixed(0);
+    },
+    getTotalVotes(votes) {
+      return Array.isArray(votes) ? votes.length : 0;
     },
   },
 };

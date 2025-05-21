@@ -55,7 +55,7 @@ export const useApiStore = defineStore('api', {
                         lastMessage: group.last_message ? group.last_message : 'No messages yet'
                     };
                     this.listGroups.push(chatItem);
-                    console.log(chatItem);
+                    // console.log(chatItem);
                 }
             } catch (error) {
                 console.error('Error fetching groups:', error);
@@ -114,7 +114,7 @@ export const useApiStore = defineStore('api', {
                 const data = response.data;
 
                 this.listUsers = data.users.filter(user => user.id !== userId);
-                console.log(this.listUsers);
+                // console.log(this.listUsers);
             } catch (error) {
                 console.error('Error fetching users:', error);
             }
@@ -146,6 +146,22 @@ export const useApiStore = defineStore('api', {
                 }
             } catch (error) {
                 console.error('Error joining group:', error);
+            }
+        },
+
+        async getConversationMessages(id) {
+            try {
+                const response = await api.get(`chats/${id}/messages`);
+
+                if (response.status !== 200) {
+                    throw new Error('Failed to fetch conversation');
+                }
+
+                const data = response.data;
+
+                return data;
+            } catch (error) {
+                console.error('Error fetching conversation messages:', error);
             }
         }
     }
