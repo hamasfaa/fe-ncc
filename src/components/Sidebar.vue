@@ -53,6 +53,27 @@
       </button>
     </div>
 
+    <div class="flex-1 overflow-y-auto">
+      <div
+        v-if="API_STORE.listGroups.length === 0"
+        class="p-3 text-center text-gray-500 text-sm"
+      >
+        Loading groups...
+      </div>
+
+      <div
+        v-for="group in API_STORE.listGroups"
+        :key="group.id"
+        class="p-3 border-b border-gray-200 hover:bg-gray-200 cursor-pointer"
+      >
+        <div class="flex justify-between items-center">
+          <h3 class="font-medium text-gray-800">{{ group.name }}</h3>
+          <span class="text-xs text-gray-500">Group</span>
+        </div>
+        <p class="text-sm text-gray-500 truncate">{{ group.lastMessage }}</p>
+      </div>
+    </div>
+
     <div class="p-3 border-t border-gray-200 bg-gray-50 mt-auto">
       <div class="flex items-center justify-between">
         <div class="flex items-center space-x-2">
@@ -85,12 +106,15 @@
 
 <script>
 import { useAuthStore } from "@/stores/authStore";
+import { useApiStore } from "@/stores/apiStore";
 
 export default {
   setup() {
     const AUTH_STORE = useAuthStore();
+    const API_STORE = useApiStore();
     return {
       AUTH_STORE,
+      API_STORE,
     };
   },
   methods: {
