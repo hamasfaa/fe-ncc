@@ -37,8 +37,6 @@ export const useModalStore = defineStore('modal', {
 
                 messages.forEach(message => {
                     try {
-                        console.log("message", message);
-
                         if (message.message_type === 'text') {
                             this.listMessages.push({
                                 message_id: message.id,
