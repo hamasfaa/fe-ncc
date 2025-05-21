@@ -1,7 +1,5 @@
 import { defineStore } from 'pinia';
-import axios from 'axios';
-
-const API_URL = "http://34.101.160.231:8000";
+import api from "@/service/api";
 
 export const useAuthStore = defineStore('auth', {
     state: () => ({
@@ -18,7 +16,7 @@ export const useAuthStore = defineStore('auth', {
         async login({ email, password }) {
             try {
                 // console.log(email, password);
-                const response = await axios.post(`${API_URL}/login`, {
+                const response = await api.post(`login`, {
                     email,
                     password
                 });
@@ -40,7 +38,7 @@ export const useAuthStore = defineStore('auth', {
 
         async register({ username, email, password }) {
             try {
-                const response = await axios.post(`${API_URL}/register`, {
+                const response = await api.post(`register`, {
                     username,
                     email,
                     password
