@@ -21,6 +21,7 @@ async function initChatApp() {
     if (!AUTH_STORE.checkAuth) return;
 
     await API_STORE.getGroupChat();
+    await API_STORE.getGlobalChat();
 }
 
 initChatApp();

@@ -5,11 +5,13 @@ export const useApiStore = defineStore('api', {
     state: () => ({
         token: localStorage.getItem('authToken') || null,
         activeConversation: {
-            id: '00000000-0000-0000-0000-000000000001',
-            type: 'global',
-            name: 'Global Chat'
+            id: null,
+            type: null,
+            name: null,
         },
         listGroups: [],
+        active: null,
+        members: null,
     }),
 
     actions: {
@@ -29,7 +31,6 @@ export const useApiStore = defineStore('api', {
 
         async getGroupChat() {
             try {
-                console.log('Fetching group chats...');
                 const response = await api.get('chats/groups');
 
                 if (response.status !== 200) {
@@ -48,6 +49,44 @@ export const useApiStore = defineStore('api', {
                 }
             } catch (error) {
                 console.error('Error fetching groups:', error);
+            }
+        },
+
+        async getGlobalChat() {
+            try {
+                const response = await api.get('chats/global');
+
+                if (response.status !== 200) {
+                    throw new Error('Failed to fetch global chats');
+                }
+
+                const data = response.data
+
+                this.activeConversation.id = data.globalChat.id;
+                this.activeConversation.name = data.globalChat.name;
+                this.activeConversation.type = 'global';
+
+                await this.getGlobalChatStats();
+
+                return data.globalChat;
+            } catch (error) {
+                console.error('Error fetching global chat:', error);
+            }
+        },
+
+        async getGlobalChatStats() {
+            try {
+                const response = await api.get('chats/global/stats');
+
+                if (response.status !== 200) {
+                    throw new Error('Failed to fetch global chats');
+                }
+
+                const data = response.data
+                this.active = data.stats.activeMembers
+                this.members = data.stats.totalMembers
+            } catch (error) {
+
             }
         }
     }

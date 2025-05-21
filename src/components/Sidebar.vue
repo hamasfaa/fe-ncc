@@ -2,8 +2,8 @@
   <div class="w-64 h-screen flex flex-col bg-gray-100 border-r border-gray-200">
     <div class="p-4 border-b border-gray-200">
       <h2 class="text-xl font-semibold text-gray-800 mb-3">Chats</h2>
-      <div class="relative flex items-center mb-3">
-        <input
+      <div class="relative flex items-center justify-between w-full mb-3">
+        <!-- <input
           type="text"
           placeholder="Search users..."
           class="w-full pl-3 pr-10 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
@@ -24,7 +24,17 @@
             <circle cx="11" cy="11" r="8"></circle>
             <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
           </svg>
-        </button>
+        </button> -->
+        <div class="flex items-center gap-2">
+          <div class="px-3 py-1 bg-green-100 rounded-md text-sm">
+            <span class="font-medium text-green-800">Online:</span>
+            <span class="text-green-700">{{ API_STORE.active || 0 }}</span>
+          </div>
+          <div class="px-3 py-1 bg-blue-100 rounded-md text-sm">
+            <span class="font-medium text-blue-800">Total:</span>
+            <span class="text-blue-700">{{ API_STORE.members || 0 }}</span>
+          </div>
+        </div>
       </div>
       <div class="flex space-x-2">
         <button
@@ -62,13 +72,32 @@
       </div>
 
       <div
+        class="p-3 border-b border-gray-200 hover:bg-gray-200 cursor-pointer"
+      >
+        <div class="flex justify-between items-center">
+          <h3 class="font-medium text-gray-800">
+            {{ API_STORE.activeConversation.name }}
+          </h3>
+          <span class="text-xs text-gray-500">{{
+            !API_STORE.activeConversation.type
+              ? "Loading..."
+              : API_STORE.activeConversation.type.charAt(0).toUpperCase() +
+                API_STORE.activeConversation.type.slice(1)
+          }}</span>
+        </div>
+        <p class="text-sm text-gray-500 truncate">Dummy</p>
+      </div>
+
+      <div
         v-for="group in API_STORE.listGroups"
         :key="group.id"
         class="p-3 border-b border-gray-200 hover:bg-gray-200 cursor-pointer"
       >
         <div class="flex justify-between items-center">
           <h3 class="font-medium text-gray-800">{{ group.name }}</h3>
-          <span class="text-xs text-gray-500">Group</span>
+          <span class="text-xs text-gray-500">{{
+            group.type.charAt(0).toUpperCase() + group.type.slice(1)
+          }}</span>
         </div>
         <p class="text-sm text-gray-500 truncate">{{ group.lastMessage }}</p>
       </div>
