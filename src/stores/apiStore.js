@@ -209,6 +209,20 @@ export const useApiStore = defineStore('api', {
             } catch (error) {
                 console.error('Error submitting poll vote:', error);
             }
+        },
+
+        async leaveGroup(groupId) {
+            try {
+                const response = await api.post(`chats/${groupId}/leave`);
+
+                if (response.status !== 200) {
+                    throw new Error('Failed to leave group');
+                }
+            } catch (error) {
+                console.error('Error leaving group:', error);
+            }
         }
+
+
     }
 })

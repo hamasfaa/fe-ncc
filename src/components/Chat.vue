@@ -11,33 +11,43 @@
           API_STORE.activeConversation.desc
         }}</span>
       </div>
-      <div class="flex items-center">
-        <button
-          id="create-poll-btn"
-          class="flex items-center px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-md transition-colors"
-          @click="MODAL_STORE.toggleCreatePoll"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            class="mr-1.5"
+      <div class="flex items-center space-x-4">
+        <div class="flex items-center">
+          <button
+            id="create-poll-btn"
+            class="flex items-center px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-md transition-colors"
+            @click="MODAL_STORE.toggleCreatePoll"
           >
-            <path d="M20 11.08V8l-6-6H6a2 2 0 0 0-2 2v16c0 1.1.9 2 2 2h6" />
-            <path d="M14 2v6h6" />
-            <path d="M18 14v4" />
-            <path d="M18 22v-4" />
-            <path d="M22 18h-4" />
-            <path d="M14 18h4" />
-          </svg>
-          Create Poll
-        </button>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="mr-1.5"
+            >
+              <path d="M20 11.08V8l-6-6H6a2 2 0 0 0-2 2v16c0 1.1.9 2 2 2h6" />
+              <path d="M14 2v6h6" />
+              <path d="M18 14v4" />
+              <path d="M18 22v-4" />
+              <path d="M22 18h-4" />
+              <path d="M14 18h4" />
+            </svg>
+            Create Poll
+          </button>
+        </div>
+        <div class="flex items-center">
+          <button
+            class="flex items-center px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-md transition-colors"
+            @click="handleLeaveGroup"
+          >
+            Leave Group
+          </button>
+        </div>
       </div>
     </header>
 
@@ -285,6 +295,15 @@ export default {
         await this.API_STORE.submitPollVote(pollId, selectedOptionId);
       } catch (error) {
         console.error("Error voting in poll:", error);
+      }
+    },
+
+    async handleLeaveGroup() {
+      try {
+        await this.API_STORE.leaveGroup(this.API_STORE.activeConversation.id);
+        this.$router.push("/");
+      } catch (error) {
+        console.error("Error leaving group:", error);
       }
     },
 
