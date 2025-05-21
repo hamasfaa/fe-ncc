@@ -5,6 +5,7 @@ export const useModalStore = defineStore('modal', {
     state: () => ({
         isCreate: false,
         isJoin: false,
+        isCreatePoll: false,
         section: "group",
         listMessages: []
     }),
@@ -15,6 +16,9 @@ export const useModalStore = defineStore('modal', {
         },
         toggleJoin() {
             this.isJoin = !this.isJoin;
+        },
+        toggleCreatePoll() {
+            this.isCreatePoll = !this.isCreatePoll;
         },
         async switchToChat(chatId, chatType, chatName) {
             const API_STORE = useApiStore();
