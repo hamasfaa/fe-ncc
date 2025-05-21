@@ -54,18 +54,30 @@
 
     <div class="flex border-b border-gray-200">
       <button
-        class="flex-1 py-2 px-4 font-medium text-blue-600 border-b-2 border-blue-600 active"
+        class="flex-1 py-2 px-4 font-medium"
+        :class="
+          MODAL_STORE.section === 'group'
+            ? 'text-blue-600 border-b-2 border-blue-600'
+            : 'text-gray-500 hover:text-blue-600'
+        "
+        @click="MODAL_STORE.section = 'group'"
       >
         Channels
       </button>
       <button
-        class="flex-1 py-2 px-4 font-medium text-gray-500 hover:text-blue-600"
+        class="flex-1 py-2 px-4 font-medium"
+        :class="
+          MODAL_STORE.section === 'private'
+            ? 'text-blue-600 border-b-2 border-blue-600'
+            : 'text-gray-500 hover:text-blue-600'
+        "
+        @click="MODAL_STORE.section = 'private'"
       >
         Users
       </button>
     </div>
 
-    <div class="flex-1 overflow-y-auto">
+    <div class="flex-1 overflow-y-auto" v-if="MODAL_STORE.section === 'group'">
       <div
         v-if="API_STORE.listGroups.length === 0"
         class="p-3 text-center text-gray-500 text-sm"
@@ -102,6 +114,20 @@
           }}</span>
         </div>
         <p class="text-sm text-gray-500 truncate">{{ group.lastMessage }}</p>
+      </div>
+    </div>
+
+    <div
+      v-if="MODAL_STORE.section === 'private'"
+      class="flex-1 overflow-y-auto"
+    >
+      <div
+        class="p-3 border-b border-gray-200 hover:bg-gray-200 cursor-pointer"
+      >
+        <div class="flex justify-between items-center">
+          <h3 class="font-medium text-gray-800">JOKO</h3>
+        </div>
+        <p class="text-sm text-gray-500 truncate">Online</p>
       </div>
     </div>
 

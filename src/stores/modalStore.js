@@ -4,6 +4,7 @@ export const useModalStore = defineStore('modal', {
     state: () => ({
         isCreate: false,
         isJoin: false,
+        section: "group",
     }),
 
     actions: {
