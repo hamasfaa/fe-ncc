@@ -1,5 +1,6 @@
 import api from "@/service/api";
 import { defineStore } from 'pinia';
+import { useAuthStore } from "./authStore";
 
 export const useApiStore = defineStore('api', {
     state: () => ({
@@ -10,6 +11,7 @@ export const useApiStore = defineStore('api', {
             name: null,
         },
         listGroups: [],
+        listUsers: [],
         active: null,
         members: null,
     }),
@@ -88,6 +90,26 @@ export const useApiStore = defineStore('api', {
                 this.members = data.stats.totalMembers
             } catch (error) {
                 console.error('Error fetching global stats:', error);
+            }
+        },
+
+        async getUser() {
+            try {
+                const AUTH_STORE = useAuthStore();
+                const userId = AUTH_STORE.user.id;
+
+                const response = await api.get('users');
+
+                if (response.status !== 200) {
+                    throw new Error('Failed to fetch users');
+                }
+
+                const data = response.data;
+
+                this.listUsers = data.users.filter(user => user.id !== userId);
+                console.log(this.listUsers);
+            } catch (error) {
+                console.error('Error fetching users:', error);
             }
         },
 

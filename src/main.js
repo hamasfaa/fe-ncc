@@ -22,6 +22,7 @@ async function initChatApp() {
 
     await API_STORE.getGroupChat();
     await API_STORE.getGlobalChat();
+    await API_STORE.getUser();
 }
 
 initChatApp();

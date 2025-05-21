@@ -122,12 +122,32 @@
       class="flex-1 overflow-y-auto"
     >
       <div
+        v-for="user in API_STORE.listUsers"
+        :key="user.id"
         class="p-3 border-b border-gray-200 hover:bg-gray-200 cursor-pointer"
       >
         <div class="flex justify-between items-center">
-          <h3 class="font-medium text-gray-800">JOKO</h3>
+          <div class="flex items-center gap-2">
+            <div
+              class="w-2 h-2 rounded-full"
+              :class="user.status === 'online' ? 'bg-green-500' : 'bg-gray-400'"
+            ></div>
+            <h3 class="font-medium text-gray-800">{{ user.username }}</h3>
+          </div>
         </div>
-        <p class="text-sm text-gray-500 truncate">Online</p>
+        <p
+          class="text-sm truncate ml-4"
+          :class="user.status === 'online' ? 'text-green-600' : 'text-gray-500'"
+        >
+          {{ user.status === "online" ? "Online" : "Offline" }}
+        </p>
+      </div>
+
+      <div
+        v-if="API_STORE.listUsers && API_STORE.listUsers.length === 0"
+        class="p-4 text-center text-gray-500"
+      >
+        No users available
       </div>
     </div>
 
