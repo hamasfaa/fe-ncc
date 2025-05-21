@@ -39,6 +39,7 @@
       <div class="flex space-x-2">
         <button
           class="flex-1 px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-md"
+          @click="MODAL_STORE.toggleCreate"
         >
           Create Group
         </button>
@@ -136,14 +137,17 @@
 <script>
 import { useAuthStore } from "@/stores/authStore";
 import { useApiStore } from "@/stores/apiStore";
+import { useModalStore } from "@/stores/modalStore";
 
 export default {
   setup() {
     const AUTH_STORE = useAuthStore();
     const API_STORE = useApiStore();
+    const MODAL_STORE = useModalStore();
     return {
       AUTH_STORE,
       API_STORE,
+      MODAL_STORE,
     };
   },
   methods: {

@@ -1,0 +1,75 @@
+<template>
+  <Teleport to="body">
+    <div
+      class="fixed inset-0 bg-transparant bg-opacity-50 items-center justify-center z-50 flex"
+    >
+      <div class="bg-white rounded-lg shadow-xl w-full max-w-md mx-4">
+        <div
+          class="flex items-center justify-between border-b border-gray-200 px-6 py-4"
+        >
+          <h3 class="text-xl font-semibold text-gray-800">Create Group</h3>
+          <button
+            class="text-gray-500 hover:text-gray-700 focus:outline-none"
+            @click="MODAL_STORE.toggleCreate"
+          >
+            <svg
+              class="h-6 w-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M6 18L18 6M6 6l12 12"
+              ></path>
+            </svg>
+          </button>
+        </div>
+        <div class="p-6">
+          <form id="group-form" class="space-y-4">
+            <div class="space-y-2">
+              <label
+                for="group-name"
+                class="block text-sm font-medium text-gray-700"
+                >Name</label
+              >
+              <input
+                type="text"
+                id="group-name"
+                placeholder="Fill a name group..."
+                required
+                class="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              />
+            </div>
+            <div class="pt-2">
+              <button
+                type="submit"
+                class="w-full px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-md shadow-sm transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+              >
+                Create Group
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </Teleport>
+</template>
+
+<script>
+import { Teleport } from "vue";
+import { useModalStore } from "@/stores/modalStore";
+
+export default {
+  components: { Teleport },
+  setup() {
+    const MODAL_STORE = useModalStore();
+    return {
+      MODAL_STORE,
+    };
+  },
+};
+</script>
