@@ -68,6 +68,7 @@
         </div>
         <button
           class="px-3 py-1 bg-gray-200 hover:bg-gray-300 text-gray-700 text-sm font-medium rounded-md"
+          @click="handleLogout"
         >
           Logout
         </button>
@@ -75,3 +76,26 @@
     </div>
   </div>
 </template>
+
+<script>
+import { useAuthStore } from "@/stores/authStore";
+
+export default {
+  setup() {
+    const AUTH_STORE = useAuthStore();
+    return {
+      AUTH_STORE,
+    };
+  },
+  methods: {
+    handleLogout() {
+      try {
+        this.AUTH_STORE.logout();
+        this.$router.push("/login");
+      } catch (error) {
+        console.error("Logout failed:", error);
+      }
+    },
+  },
+};
+</script>
