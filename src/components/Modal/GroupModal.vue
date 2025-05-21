@@ -29,16 +29,14 @@
           </button>
         </div>
         <div class="p-6">
-          <form id="group-form" class="space-y-4">
+          <form class="space-y-4" @submit.prevent="handleCreateGroup">
             <div class="space-y-2">
-              <label
-                for="group-name"
-                class="block text-sm font-medium text-gray-700"
+              <label class="block text-sm font-medium text-gray-700"
                 >Name</label
               >
               <input
                 type="text"
-                id="group-name"
+                v-model="groupName"
                 placeholder="Fill a name group..."
                 required
                 class="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
@@ -60,16 +58,32 @@
 </template>
 
 <script>
-import { Teleport } from "vue";
 import { useModalStore } from "@/stores/modalStore";
+import { useApiStore } from "@/stores/apiStore";
 
 export default {
-  components: { Teleport },
   setup() {
     const MODAL_STORE = useModalStore();
+    const API_STORE = useApiStore();
     return {
       MODAL_STORE,
+      API_STORE,
     };
+  },
+  data() {
+    return {
+      groupName: "",
+    };
+  },
+  methods: {
+    async handleCreateGroup() {
+      try {
+        await this.API_STORE.createGroup(this.groupName);
+        this.groupName = "";
+      } finally {
+        this.MODAL_STORE.toggleCreate();
+      }
+    },
   },
 };
 </script>

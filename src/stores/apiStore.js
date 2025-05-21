@@ -86,7 +86,21 @@ export const useApiStore = defineStore('api', {
                 this.active = data.stats.activeMembers
                 this.members = data.stats.totalMembers
             } catch (error) {
+                console.error('Error fetching global stats:', error);
+            }
+        },
 
+        async createGroup(name) {
+            try {
+                const response = await api.post('chats/group', {
+                    name
+                });
+
+                if (response.status !== 201) {
+                    throw new Error('Failed to create group');
+                }
+            } catch (error) {
+                console.error('Error creating group:', error);
             }
         }
     }
