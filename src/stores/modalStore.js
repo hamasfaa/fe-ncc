@@ -71,6 +71,8 @@ export const useModalStore = defineStore('modal', {
                         console.error("Error processing message:", error, message);
                     }
                 });
+
+                this.listMessages = this.listMessages.reverse();
             } catch (error) {
                 console.error("Failed to get conversation messages:", error);
             }

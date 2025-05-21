@@ -34,11 +34,29 @@ export const useWebsocketStore = defineStore('websocket', {
             this.ws.onmessage = (event) => {
                 const data = JSON.parse(event.data);
 
+                const AUTH_STORE = useAuthStore();
+                const MODAL_STORE = useModalStore();
+                const API_STORE = useApiStore();
+                const currentUser = AUTH_STORE.currentUser;
+
                 console.log('WebSocket message received:', data);
 
                 if (data.type === 'text') {
-
+                    if (data.conversation_id === API_STORE.activeConversation.id) {
+                        if (data.sender_id !== currentUser.id) {
+                            MODAL_STORE.listMessages.push({
+                                message_id: data.id,
+                                sender_id: data.sender_id,
+                                sender: data.sender.username,
+                                content: data.content,
+                                timestamp: data.created_at,
+                                type: 'text',
+                            });
+                        }
+                    }
                 } else if (data.type === 'poll') {
+                    if (data.conversation_id === API_STORE.activeConversation.id) {
+                    }
                 } else if (data.type == 'user_status') {
 
                 }
@@ -63,11 +81,5 @@ export const useWebsocketStore = defineStore('websocket', {
                 this.ws = null;
             }
         },
-
-        // displayMessage(message) {
-        //     if (message.message.type)
-        //  }
-
-
     }
 })
