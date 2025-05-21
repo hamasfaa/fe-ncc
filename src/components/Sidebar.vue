@@ -62,7 +62,13 @@
             <span></span>
           </div>
           <div class="flex flex-col">
-            <span class="font-medium text-sm text-gray-800">Loading...</span>
+            <span class="font-medium text-sm text-gray-800">
+              {{
+                AUTH_STORE.user.username
+                  ? AUTH_STORE.user.username
+                  : "Loading..."
+              }}
+            </span>
             <span class="text-xs text-green-500">online</span>
           </div>
         </div>
