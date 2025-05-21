@@ -46,6 +46,7 @@ export const useApiStore = defineStore('api', {
                         lastMessage: group.last_message ? group.last_message : 'No messages yet'
                     };
                     this.listGroups.push(chatItem);
+                    console.log(chatItem);
                 }
             } catch (error) {
                 console.error('Error fetching groups:', error);
@@ -101,6 +102,21 @@ export const useApiStore = defineStore('api', {
                 }
             } catch (error) {
                 console.error('Error creating group:', error);
+            }
+        },
+
+        async joinGroup(name) {
+            try {
+                // console.log(name)
+                const response = await api.post('chats/join', {
+                    name
+                });
+
+                if (response.status !== 200) {
+                    throw new Error('Failed to join group');
+                }
+            } catch (error) {
+                console.error('Error joining group:', error);
             }
         }
     }
