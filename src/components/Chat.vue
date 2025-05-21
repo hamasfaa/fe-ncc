@@ -4,8 +4,12 @@
       class="flex items-center justify-between px-6 py-3 border-b border-gray-200 bg-gray-100"
     >
       <div class="flex-1">
-        <h2 class="text-lg font-semibold">Global Chat</h2>
-        <span class="text-sm text-gray-500">Public channel for all users</span>
+        <h2 class="text-lg font-semibold">
+          {{ API_STORE.activeConversation.name }}
+        </h2>
+        <span class="text-sm text-gray-500">{{
+          API_STORE.activeConversation.desc
+        }}</span>
       </div>
       <div class="flex items-center">
         <button

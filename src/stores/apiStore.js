@@ -7,8 +7,15 @@ export const useApiStore = defineStore('api', {
         token: localStorage.getItem('authToken') || null,
         activeConversation: {
             id: null,
+            type: 'global',
+            name: 'Global Chat',
+            desc: 'Global Chat',
+        },
+        globalChat: {
+            id: null,
             type: null,
             name: null,
+            desc: null,
         },
         listGroups: [],
         listUsers: [],
@@ -65,9 +72,9 @@ export const useApiStore = defineStore('api', {
 
                 const data = response.data
 
-                this.activeConversation.id = data.globalChat.id;
-                this.activeConversation.name = data.globalChat.name;
-                this.activeConversation.type = 'global';
+                this.globalChat.id = data.globalChat.id;
+                this.globalChat.name = data.globalChat.name;
+                this.globalChat.type = 'global';
 
                 await this.getGlobalChatStats();
 

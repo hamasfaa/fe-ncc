@@ -87,16 +87,23 @@
 
       <div
         class="p-3 border-b border-gray-200 hover:bg-gray-200 cursor-pointer"
+        @click="
+          MODAL_STORE.switchToChat(
+            API_STORE.globalChat.id,
+            API_STORE.globalChat.type,
+            API_STORE.globalChat.name
+          )
+        "
       >
         <div class="flex justify-between items-center">
           <h3 class="font-medium text-gray-800">
-            {{ API_STORE.activeConversation.name }}
+            {{ API_STORE.globalChat.name }}
           </h3>
           <span class="text-xs text-gray-500">{{
-            !API_STORE.activeConversation.type
+            !API_STORE.globalChat.type
               ? "Loading..."
-              : API_STORE.activeConversation.type.charAt(0).toUpperCase() +
-                API_STORE.activeConversation.type.slice(1)
+              : API_STORE.globalChat.type.charAt(0).toUpperCase() +
+                API_STORE.globalChat.type.slice(1)
           }}</span>
         </div>
         <p class="text-sm text-gray-500 truncate">Dummy</p>
@@ -106,6 +113,7 @@
         v-for="group in API_STORE.listGroups"
         :key="group.id"
         class="p-3 border-b border-gray-200 hover:bg-gray-200 cursor-pointer"
+        @click="MODAL_STORE.switchToChat(group.id, group.type, group.name)"
       >
         <div class="flex justify-between items-center">
           <h3 class="font-medium text-gray-800">{{ group.name }}</h3>
@@ -125,6 +133,7 @@
         v-for="user in API_STORE.listUsers"
         :key="user.id"
         class="p-3 border-b border-gray-200 hover:bg-gray-200 cursor-pointer"
+        @click="MODAL_STORE.switchToChat(user.id, 'private', user.username)"
       >
         <div class="flex justify-between items-center">
           <div class="flex items-center gap-2">
