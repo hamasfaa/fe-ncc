@@ -149,6 +149,24 @@ export const useApiStore = defineStore('api', {
             }
         },
 
+        async createPoll({ question, options, isMultipleChoice, expiresAt }) {
+            try {
+                // console.log('Creating poll:', question, options, isMultipleChoice, expiresAt);
+                const response = await api.post(`chats/${this.activeConversation.id}/polls`, {
+                    question,
+                    options,
+                    is_multiple_choice: isMultipleChoice,
+                    expires_at: expiresAt
+                });
+
+                if (response.status !== 201) {
+                    throw new Error('Failed to create poll');
+                }
+            } catch (error) {
+                console.error('Error creating poll:', error);
+            }
+        },
+
         async createOrGetPrivateChat(userId) {
             try {
                 const response = await api.post('chats/personal', {
