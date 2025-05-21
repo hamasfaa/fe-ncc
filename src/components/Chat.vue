@@ -40,9 +40,13 @@
       <!-- Messages will be added here -->
     </div>
 
-    <form class="flex items-center border-t border-gray-200 p-3 bg-gray-100">
+    <form
+      class="flex items-center border-t border-gray-200 p-3 bg-gray-100"
+      @submit.prevent="handleSendMessage"
+    >
       <input
         type="text"
+        v-model="message"
         placeholder="Type a message..."
         autocomplete="off"
         required
@@ -57,3 +61,32 @@
     </form>
   </div>
 </template>
+
+<script>
+import { useApiStore } from "@/stores/apiStore";
+
+export default {
+  setup() {
+    const API_STORE = useApiStore();
+    return {
+      API_STORE,
+    };
+  },
+  data() {
+    return {
+      message: "",
+    };
+  },
+  methods: {
+    async handleSendMessage() {
+      if (this.message.trim() === "") return;
+      try {
+        await this.API_STORE.sendMessage(this.message);
+        this.message = "";
+      } catch (error) {
+        console.error("Error sending message:", error);
+      }
+    },
+  },
+};
+</script>
