@@ -26,6 +26,12 @@ export const useModalStore = defineStore('modal', {
             API_STORE.activeConversation.type = chatType;
             API_STORE.activeConversation.name = chatName;
 
+            if (chatType === 'private') {
+                const idChat = await API_STORE.createOrGetPrivateChat(chatId);
+                API_STORE.activeConversation.id = idChat[0].id;
+                chatId = idChat[0].id;
+            }
+
             if (chatType === 'group') {
                 API_STORE.activeConversation.desc = "Group Chat";
             } else if (chatType === 'private') {

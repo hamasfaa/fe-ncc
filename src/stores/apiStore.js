@@ -149,6 +149,21 @@ export const useApiStore = defineStore('api', {
             }
         },
 
+        async createOrGetPrivateChat(userId) {
+            try {
+                const response = await api.post('chats/personal', {
+                    user_id: userId
+                })
+
+                const data = response.data;
+                console.log("Private chat data:", response);
+
+                return data.conversation
+            } catch (error) {
+                console.error('Error creating or getting private chat:', error);
+            }
+        },
+
         async getConversationMessages(id) {
             try {
                 const response = await api.get(`chats/${id}/messages`);
